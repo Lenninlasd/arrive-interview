@@ -14,6 +14,9 @@ export const Page = () => {
         const fetchData = async () => {
             try {
                 const res = await fetch("https://dummyjson.com/products?limit=10");
+                if (!res.ok) {
+                    throw new Error(`HTTP error, status: ${res.status}`);
+                }
                 const data: ProductObject = await res.json();
                 setProducts(data);
             } catch (error: unknown) {
