@@ -26,14 +26,8 @@ export const Page = () => {
                 const data: ProductObject = await res.json();
                 setProducts(data);
             } catch (error: unknown) {
-                if (error instanceof DOMException && error.name === "AbortError") {
-                    return;
-                }
-                if (error instanceof Error) {
-                    console.error("Error fetching data:", error.message);
-                } else {
-                    console.error("Error fetching data:", error);
-                }
+                if (controller.signal.aborted) return;
+                console.error("Error fetching data:", error);
                 setError("Could not load products. Please try again later.");
             } finally {
                 if (!controller.signal.aborted) {
