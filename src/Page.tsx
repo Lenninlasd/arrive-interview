@@ -2,13 +2,15 @@ import { useState, useEffect, useMemo, useDeferredValue } from "react";
 import { Card, Product } from "./Card";
 
 interface ProductObject {
-    products: Product[],
+    products: Product[];
 }
 
 export const Page = () => {
     const [products, setProducts] = useState<ProductObject | null>(null);
     const [query, setQuery] = useState<string>("");
-    const deferedQuery = useDeferredValue(query);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const deferredQuery = useDeferredValue(query);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -32,9 +34,14 @@ export const Page = () => {
                 } else {
                     console.error("Error fetching data:", error);
                 }
+                setError("Could not load products. Please try again later.");
+            } finally {
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
             }
         }
-        
+
         fetchData();
 
         return () => controller.abort();
@@ -43,7 +50,7 @@ export const Page = () => {
     const filteredProducts = useMemo(() => {
         if (!products) return null;
 
-        const queryFiltered = deferedQuery.trim().toLowerCase();
+        const queryFiltered = deferredQuery.trim().toLowerCase();
         return {
             products: products.products.filter((product) => {
                 return product.title.toLowerCase().includes(queryFiltered) ||
@@ -51,18 +58,20 @@ export const Page = () => {
                     product.category.toLowerCase().includes(queryFiltered);
             }),
         };
-    }, [products, deferedQuery]);
+    }, [products, deferredQuery]);
 
     return (
         <div>
             <input className="search" type="text" placeholder="search box" value={query} onChange={(event) => setQuery(event.target.value)}/>
-            {
+            {loading && <p role="status">Loading...</p>}
+            {error && <p role="alert">{error}</p>}
+            {!loading && !error && (
                 <ul className="grid">
                     {filteredProducts?.products.map((product) => (
                         <Card key={product.id} {...product} />
                     ))}
                 </ul>
-            }
+            )}
         </div>
     );
 }
