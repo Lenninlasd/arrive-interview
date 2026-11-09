@@ -46,7 +46,7 @@ export const Page = () => {
 
     return (
         <div>
-            <input type="text" placeholder="search box" value={query} onChange={(event) => setQuery(event.target.value)}/>
+            <input className="search" type="text" placeholder="search box" value={query} onChange={(event) => setQuery(event.target.value)}/>
             {
                 <ul>
                     {filteredProducts?.products.map((product) => (
