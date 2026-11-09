@@ -62,7 +62,14 @@ export const Page = () => {
 
     return (
         <div>
-            <input className="search" type="text" placeholder="search box" value={query} onChange={(event) => setQuery(event.target.value)}/>
+            <input
+                className="search"
+                type="search" 
+                aria-label="Search products"
+                placeholder="search box"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+            />
             {loading && <p role="status">Loading...</p>}
             {error && <p role="alert">{error}</p>}
             {!loading && !error && (
