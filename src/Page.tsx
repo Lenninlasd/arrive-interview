@@ -11,15 +11,22 @@ export const Page = () => {
     const deferedQuery = useDeferredValue(query);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchData = async () => {
             try {
-                const res = await fetch("https://dummyjson.com/products?limit=10");
+                const res = await fetch("https://dummyjson.com/products?limit=10", {
+                    signal: controller.signal,
+                });
                 if (!res.ok) {
                     throw new Error(`HTTP error, status: ${res.status}`);
                 }
                 const data: ProductObject = await res.json();
                 setProducts(data);
             } catch (error: unknown) {
+                if (error instanceof DOMException && error.name === "AbortError") {
+                    return;
+                }
                 if (error instanceof Error) {
                     console.error("Error fetching data:", error.message);
                 } else {
@@ -29,6 +36,8 @@ export const Page = () => {
         }
         
         fetchData();
+
+        return () => controller.abort();
     }, []);
 
     const filteredProducts = useMemo(() => {
