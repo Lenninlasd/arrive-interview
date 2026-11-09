@@ -48,11 +48,11 @@ export const Page = () => {
         <div>
             <input className="search" type="text" placeholder="search box" value={query} onChange={(event) => setQuery(event.target.value)}/>
             {
-                <ul>
+                <div className="grid">
                     {filteredProducts?.products.map((product) => (
                         <Card key={product.id} {...product} />
                     ))}
-                </ul>
+                </div>
             }
         </div>
     );
