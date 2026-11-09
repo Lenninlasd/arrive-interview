@@ -24,3 +24,27 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 48px 64px;
 }
+
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px 40px;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0;
+  flex: 1;
+}
+
+.card .category {
+  text-transform: capitalize;
+}

@@ -8,10 +8,10 @@ export interface Product {
 
 export const Card = ({ title, description, category }: Product) => {
     return (
-        <div className="card">
+        <li className="card">
             <h2>{title}</h2>
             <p>{description}</p>
-            <div>{category}</div>
-        </div>
+            <div className="category">{category}</div>
+        </li>
     );
 }
